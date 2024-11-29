@@ -2,7 +2,8 @@ import openai
 import streamlit as st
 
 # Configure sua API Key
-openai.api_key = "SUA_API_KEY"
+openai.api_key = "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"
+
 
 def extrair_info_com_gpt(texto):
     prompt = f"""
