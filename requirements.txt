@@ -2,3 +2,6 @@ streamlit
 openai
 python-docx
 pdfplumber
+pytesseract
+pdf2image
+Pillow
