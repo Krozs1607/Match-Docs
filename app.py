@@ -15,7 +15,7 @@ def extrair_info_com_gpt(texto):
     Texto do boleto:
     {texto}
     """
-    response = openai.Completion.create(
+    response = openai.chat.completions.create(
         engine="text-davinci-003",
         prompt=prompt,
         max_tokens=150
