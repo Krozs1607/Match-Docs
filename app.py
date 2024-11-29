@@ -6,22 +6,17 @@ openai.api_key = "sk-proj-YzkPHeW1f9wmMkJJcm2ZHhOGseEmNgjgEEw4zMQrLX2gVoIwxH6iRP
 
 
 def extrair_info_com_gpt(texto):
-    prompt = f"""
-    Extraia as seguintes informações de um boleto:
-    - Nome do Beneficiário
-    - Data de Vencimento
-    - Valor Total
-    
-    Texto do boleto:
-    {texto}
-    """
-    response = openai.chat.completions.create(
-        engine="text-davinci-003",
-        prompt=prompt,
-        max_tokens=150
+    response = openai.ChatCompletion.create(
+        model="gpt-4",  # Ou gpt-3.5-turbo se estiver usando esse modelo
+        messages=[
+            {"role": "system", "content": "Você é um assistente que ajuda a extrair informações de boletos."},
+            {"role": "user", "content": f"Extraia as informações do seguinte texto: {texto}"}
+        ],
+        max_tokens=200,
+        temperature=0
     )
     resposta_dict = resposta.model_dump()
-    return resposta_dict['choices'][0].text.strip()
+    return resposta_dict['choices'][0]['message']['content']
 
 st.title("Leitor de Boletos com GPT")
 uploaded_file = st.file_uploader("Faça upload do boleto (PDF ou imagem)", type=["pdf", "png", "jpg"])
