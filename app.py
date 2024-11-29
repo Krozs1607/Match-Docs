@@ -67,7 +67,7 @@ def extrair_info_com_gpt(texto_extraido):
 
     # Chamada à API do OpenAI (substitua sua chave API aqui)
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",  # ou gpt-4 dependendo da sua chave
+        model="gpt-4",  # ou gpt-4 dependendo da sua chave
         messages=[{"role": "system", "content": "Você é um assistente de extração de dados de boletos."},
                   {"role": "user", "content": prompt}],
     )
