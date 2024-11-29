@@ -20,7 +20,8 @@ def extrair_info_com_gpt(texto):
         prompt=prompt,
         max_tokens=150
     )
-    return response.choices[0].text.strip()
+    resposta_dict = resposta.model_dump()
+    return resposta_dict['choices'][0].text.strip()
 
 st.title("Leitor de Boletos com GPT")
 uploaded_file = st.file_uploader("Faça upload do boleto (PDF ou imagem)", type=["pdf", "png", "jpg"])
