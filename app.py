@@ -15,7 +15,8 @@ def generate_combinations_with_openai(prompt):
             temperature=0.7,
             max_tokens=500
         )
-        return response['choices'][0]['message']['content']
+        resposta_dict = resposta.model_dump()
+        return resposta_dict['choices'][0]['message']['content'].strip()
     except Exception as e:
         return f"Erro ao gerar combinações: {e}"
 
