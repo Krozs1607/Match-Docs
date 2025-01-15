@@ -21,7 +21,7 @@ def generate_combinations_with_openai(prompt):
 
 def main():
     # Configurar a API Key da OpenAI
-    openai.api_key = os.getenv("OPENAI_API_KEY")
+    openai.api_key = os.getenv("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")
 
     st.title("Sugestão de Lanches Fast-Food por OpenAI")
 
