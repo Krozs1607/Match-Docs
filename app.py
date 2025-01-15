@@ -1,80 +1,63 @@
 import streamlit as st
-import pdfplumber
-from pdf2image import convert_from_bytes  # Use convert_from_bytes
-import pytesseract
-from io import BytesIO
+import pandas as pd
 import openai
+import os
 
-# Função para extrair texto usando OCR
-def extrair_texto_pdf_com_ocr(uploaded_file):
+def generate_combinations_with_openai(prompt):
+    """Usa a API da OpenAI para gerar combinações de lanches."""
     try:
-        # Converte o arquivo PDF para bytes
-        file_bytes = uploaded_file.read()
-        
-        # Converte o PDF em imagens usando pdf2image
-        imagens = convert_from_bytes(file_bytes)  # Usando convert_from_bytes
-        texto = ""
-        
-        for imagem in imagens:
-            # Usando pytesseract para extrair o texto das imagens
-            texto += pytesseract.image_to_string(imagem)
-        
-        return texto
+        response = openai.chat.completions.create(
+            model="gpt-4",
+            messages=[
+                {"role": "system", "content": "Você é um assistente especializado em criar sugestões de combinações de lanches com base em um limite calórico."},
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.7,
+            max_tokens=500
+        )
+        return response['choices'][0]['message']['content']
     except Exception as e:
-        return f"Erro ao tentar converter o PDF com OCR: {e}"
+        return f"Erro ao gerar combinações: {e}"
 
-# Função para extrair texto diretamente do PDF (caso o texto seja acessível)
-def extrair_texto_pdf_com_pdfplumber(uploaded_file):
-    try:
-        with pdfplumber.open(uploaded_file) as pdf:
-            texto = ""
-            for pagina in pdf.pages:
-                texto += pagina.extract_text()
-            return texto
-    except Exception as e:
-        return f"Erro ao tentar extrair o texto do PDF com pdfplumber: {e}"
-
-# Função principal
 def main():
-    st.title("Extração de Informações de Boletos")
-    
-    uploaded_file = st.file_uploader("Carregue um arquivo PDF", type=["pdf"])
-    
-    if uploaded_file is not None:
-        st.write("Processando o PDF...")
-        
-        # Tente extrair o texto do PDF usando pdfplumber
-        texto_extraido = extrair_texto_pdf_com_pdfplumber(uploaded_file)
-        
-        if not texto_extraido:
-            # Caso pdfplumber não consiga, tente com OCR
-            st.write("Não foi possível extrair texto com pdfplumber. Tentando OCR...")
-            texto_extraido = extrair_texto_pdf_com_ocr(uploaded_file)
-        
-        # Exibe o texto extraído
-        st.text_area("Texto extraído", texto_extraido, height=300)
+    # Configurar a API Key da OpenAI
+    openai.api_key = os.getenv("OPENAI_API_KEY")
 
-        # Use o GPT para processar as informações extraídas
-        if texto_extraido:
-            info_extraida = extrair_info_com_gpt(texto_extraido)
-            st.write("Informações extraídas:")
-            st.write(info_extraida)
+    st.title("Sugestão de Lanches Fast-Food por OpenAI")
 
-# Função para extrair informações específicas usando GPT
-def extrair_info_com_gpt(texto_extraido):
-    prompt = f"Extraia as informações de um boleto a partir deste texto: {texto_extraido}"
-    openai.api_key = "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"
+    st.write("Insira a quantidade de calorias que você pode consumir diariamente e veja as sugestões de combos que se encaixam no seu limite calórico para o lanche da tarde!")
 
-    # Chamada à API do OpenAI (substitua sua chave API aqui)
-    response = openai.ChatCompletion.create(
-        model="gpt-4",  # ou gpt-4 dependendo da sua chave
-        messages=[{"role": "system", "content": "Você é um assistente de extração de dados de boletos."},
-                  {"role": "user", "content": prompt}],
-    )
+    # Upload da tabela de lanches
+    uploaded_file = st.file_uploader("Faça o upload da tabela de lanches (CSV com colunas 'Loja', 'Nome' e 'Calorias')", type="csv")
 
-    resposta_dict = response['choices'][0]['message']['content'].strip()
-    return resposta_dict
+    if uploaded_file:
+        # Carregar tabela de lanches
+        lanches_df = pd.read_csv(uploaded_file)
 
-# Rodando a aplicação Streamlit
+        # Exibir a tabela carregada
+        st.write("Tabela de Lanches:")
+        st.dataframe(lanches_df)
+
+        # Entrada: calorias diárias
+        daily_calories = st.number_input("Digite a quantidade de calorias que você pode consumir por dia:", min_value=1, step=1)
+
+        if daily_calories > 0:
+            # Calcular 35% das calorias diárias
+            snack_calories_limit = 0.35 * daily_calories
+            st.write(f"Você pode consumir até **{snack_calories_limit:.2f} kcal** no lanche da tarde.")
+
+            # Criar prompt para a OpenAI
+            prompt = (
+                "Com base na seguinte tabela de lanches com loja, nome e calorias: \n"
+                f"{lanches_df.to_string(index=False)} \n"
+                f"Sugira combinações de lanches que somem no máximo {snack_calories_limit:.2f} calorias. Indique o nome do combo, a loja e o total de calorias."
+            )
+
+            # Obter combinações da OpenAI
+            combinations = generate_combinations_with_openai(prompt)
+
+            st.write("## Combinações sugeridas pela OpenAI:")
+            st.text(combinations)
+
 if __name__ == "__main__":
     main()
