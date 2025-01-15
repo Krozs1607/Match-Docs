@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import openai
 import os
+from docx import Document
 
 def generate_combinations_with_openai(prompt):
     """Usa a API da OpenAI para gerar combinações de lanches."""
@@ -19,6 +20,15 @@ def generate_combinations_with_openai(prompt):
     except Exception as e:
         return f"Erro ao gerar combinações: {e}"
 
+def read_word_file(file):
+    """Lê o conteúdo de um arquivo Word e retorna como string."""
+    doc = Document(file)
+    content = []
+    for paragraph in doc.paragraphs:
+        if paragraph.text.strip():
+            content.append(paragraph.text.strip())
+    return "\n".join(content)
+
 def main():
     # Configurar a API Key da OpenAI
     openai.api_key = os.getenv("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")
@@ -27,16 +37,16 @@ def main():
 
     st.write("Insira a quantidade de calorias que você pode consumir diariamente e veja as sugestões de combos que se encaixam no seu limite calórico para o lanche da tarde!")
 
-    # Upload da tabela de lanches
-    uploaded_file = st.file_uploader("Faça o upload da tabela de lanches (CSV com colunas 'Loja', 'Nome' e 'Calorias')", type="csv")
+    # Upload do arquivo Word
+    uploaded_file = st.file_uploader("Faça o upload do arquivo Word com os dados dos lanches", type="docx")
 
     if uploaded_file:
-        # Carregar tabela de lanches
-        lanches_df = pd.read_csv(uploaded_file)
+        # Ler o conteúdo do arquivo Word
+        word_content = read_word_file(uploaded_file)
 
-        # Exibir a tabela carregada
-        st.write("Tabela de Lanches:")
-        st.dataframe(lanches_df)
+        # Exibir o conteúdo carregado
+        st.write("Conteúdo do Documento:")
+        st.text(word_content)
 
         # Entrada: calorias diárias
         daily_calories = st.number_input("Digite a quantidade de calorias que você pode consumir por dia:", min_value=1, step=1)
@@ -48,8 +58,8 @@ def main():
 
             # Criar prompt para a OpenAI
             prompt = (
-                "Com base na seguinte tabela de lanches com loja, nome e calorias: \n"
-                f"{lanches_df.to_string(index=False)} \n"
+                "Com base na seguinte tabela de lanches extraída do documento: \n"
+                f"{word_content} \n"
                 f"Sugira combinações de lanches que somem no máximo {snack_calories_limit:.2f} calorias. Indique o nome do combo, a loja e o total de calorias."
             )
 
