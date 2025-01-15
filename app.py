@@ -6,7 +6,7 @@ from docx import Document
 def generate_combinations_with_openai(prompt):
     """Usa a API da OpenAI para gerar combinações de lanches."""
     try:
-        response = openai.ChatCompletion.create(
+        response = openai.chat.completions.create(
             model="gpt-4",
             messages=[
                 {"role": "system", "content": "Você é um assistente especializado em criar sugestões de combinações de lanches com base em um limite calórico."},
