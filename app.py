@@ -1,5 +1,4 @@
 import streamlit as st
-import pandas as pd
 import openai
 import os
 from docx import Document
@@ -7,7 +6,7 @@ from docx import Document
 def generate_combinations_with_openai(prompt):
     """Usa a API da OpenAI para gerar combinações de lanches."""
     try:
-        response = openai.chat.completions.create(
+        response = openai.ChatCompletion.create(
             model="gpt-4",
             messages=[
                 {"role": "system", "content": "Você é um assistente especializado em criar sugestões de combinações de lanches com base em um limite calórico."},
@@ -22,7 +21,7 @@ def generate_combinations_with_openai(prompt):
 
 def read_word_file(file):
     """Lê o conteúdo de um arquivo Word e retorna como string."""
-    doc = "kcals.docx"
+    doc = Document(file)
     content = []
     for paragraph in doc.paragraphs:
         if paragraph.text.strip():
@@ -37,16 +36,11 @@ def main():
 
     st.write("Insira a quantidade de calorias que você pode consumir diariamente e veja as sugestões de combos que se encaixam no seu limite calórico para o lanche da tarde!")
 
-    # Upload do arquivo Word
-    uploaded_file = st.file_uploader("Faça o upload do arquivo Word com os dados dos lanches", type="docx")
+    # Ler o arquivo Word diretamente do código
+    word_file_path = "lanches.docx"  # Substitua pelo caminho do arquivo Word
 
-    if uploaded_file:
-        # Ler o conteúdo do arquivo Word
-        word_content = read_word_file(uploaded_file)
-
-        # Exibir o conteúdo carregado
-        st.write("Conteúdo do Documento:")
-        st.text(word_content)
+    try:
+        word_content = read_word_file(word_file_path)
 
         # Entrada: calorias diárias
         daily_calories = st.number_input("Digite a quantidade de calorias que você pode consumir por dia:", min_value=1, step=1)
@@ -68,6 +62,9 @@ def main():
 
             st.write("## Combinações sugeridas pela OpenAI:")
             st.text(combinations)
+
+    except FileNotFoundError:
+        st.error("O arquivo 'lanches.docx' não foi encontrado. Certifique-se de que ele está no mesmo diretório do código.")
 
 if __name__ == "__main__":
     main()
