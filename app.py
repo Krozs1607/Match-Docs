@@ -37,7 +37,7 @@ def main():
     st.write("Insira a quantidade de calorias que você pode consumir diariamente e veja as sugestões de combos que se encaixam no seu limite calórico para o lanche da tarde!")
 
     # Ler o arquivo Word diretamente do código
-    word_file_path = "lanches.docx"  # Substitua pelo caminho do arquivo Word
+    word_file_path = "kcals.docx"  # Alterado para "kcals.docx"
 
     try:
         word_content = read_word_file(word_file_path)
@@ -64,7 +64,7 @@ def main():
             st.text(combinations)
 
     except FileNotFoundError:
-        st.error("O arquivo 'lanches.docx' não foi encontrado. Certifique-se de que ele está no mesmo diretório do código.")
+        st.error("O arquivo 'kcals.docx' não foi encontrado. Certifique-se de que ele está no mesmo diretório do código.")
 
 if __name__ == "__main__":
     main()
