@@ -22,7 +22,7 @@ def generate_combinations_with_openai(prompt):
 
 def read_word_file(file):
     """Lê o conteúdo de um arquivo Word e retorna como string."""
-    doc = Document(file)
+    doc = "kcals.docx"
     content = []
     for paragraph in doc.paragraphs:
         if paragraph.text.strip():
