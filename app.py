@@ -8,7 +8,7 @@ def generate_combinations_with_openai(prompt):
         resposta = openai.chat.completions.create(
             model="gpt-4",
             messages=[
-                {"role": "system", "content": "Você é um assistente especializado em criar sugestões de combinações de lanches com base em um limite calórico."},
+                {"role": "system", "content": "Você é um assistente especializado em criar sugestões de combinações de lanches com base em um limite calórico, nunca repita combinações de lanche, e preze por passar sugestões que sejam da mesma loja."},
                 {"role": "user", "content": prompt}
             ],
             temperature=0.7,
