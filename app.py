@@ -8,7 +8,7 @@ def generate_combinations_with_openai(prompt):
         resposta = openai.chat.completions.create(
             model="gpt-4",
             messages=[
-                {"role": "system", "content": "Você é um assistente especializado em criar sugestões de combinações de lanches com base em um limite calórico, nunca repita combinações de lanche, e preze por passar sugestões que sejam da mesma loja."},
+                {"role": "system", "content": "Você é um assistente especializado em criar sugestões de combinações de lanches com base em um limite calórico, nunca repita combinações de lanche, e preze por passar sugestões que sejam da mesma loja, a sugestão só pode ter 1 tipo de alimento sólido, como hamburguer, pizza etc, 1 bebida, e se possivel 1 sobremesa, mas o mais importante, n pode exceder o limite de kcal."},
                 {"role": "user", "content": prompt}
             ],
             temperature=0.7,
