@@ -8,16 +8,25 @@ def generate_combinations_with_openai(prompt):
         resposta = openai.chat.completions.create(
             model="gpt-4",
             messages=[
-                {"role": "system", "content": "Você é um assistente especializado em criar sugestões de combinações de lanches com base em um limite calórico, nunca repita combinações de lanche, e preze por passar sugestões que sejam da mesma loja, a sugestão só pode ter 1 tipo de alimento sólido, como hamburguer, pizza etc, 1 bebida, e se possivel 1 sobremesa, mas o mais importante, n pode exceder o limite de kcal."},
-                {"role": "user", "content": prompt}
+                {
+                    "role": "system",
+                    "content": (
+                        "Você é um assistente especializado em criar sugestões de combinações de lanches com base em um limite calórico. "
+                        "Nunca repita combinações de lanche, e preze por passar sugestões que sejam da mesma loja. "
+                        "A sugestão deve conter exatamente 1 tipo de alimento sólido (como hambúrguer, pizza, sushi, etc.), 1 bebida, "
+                        "e, SE POSSÍVEL, 1 sobremesa. A sobremesa só pode ser incluída se não exceder o limite de kcal do combo."
+                    ),
+                },
+                {"role": "user", "content": prompt},
             ],
             temperature=0.7,
-            max_tokens=500
+            max_tokens=500,
         )
         resposta_dict = resposta.model_dump()
         return resposta_dict['choices'][0]['message']['content'].strip()
     except Exception as e:
         return f"Erro ao gerar combinações: {e}"
+
 
 def read_word_file(file):
     """Lê o conteúdo de um arquivo Word e retorna como string."""
