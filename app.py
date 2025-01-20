@@ -2,7 +2,6 @@ import streamlit as st
 import openai
 import os
 from docx import Document
-
 def generate_combinations_with_openai(prompt):
     """Usa a API da OpenAI para gerar combinações de lanches."""
     try:
@@ -15,7 +14,8 @@ def generate_combinations_with_openai(prompt):
             temperature=0.7,
             max_tokens=500
         )
-        return resposta.choices[0].message['content'].strip()
+        resposta_dict = resposta.model_dump()
+        return resposta_dict['choices'][0]['message']['content'].strip()
     except Exception as e:
         return f"Erro ao gerar combinações: {e}"
 
