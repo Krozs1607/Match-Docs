@@ -106,7 +106,7 @@ def main():
             st.write(f"🍔 Você pode consumir até **{snack_calories_limit:.2f} kcal** no lanche da tarde.")
 
             # Ler o arquivo Word diretamente do código
-            word_file_path = "kcal.docx"  # Certifique-se de ter o arquivo no diretório correto
+            word_file_path = "kcals.docx"  # Certifique-se de ter o arquivo no diretório correto
 
             try:
                 word_content = read_word_file(word_file_path)
