@@ -6,7 +6,7 @@ def generate_combinations_with_openai(prompt):
     """Usa a API da OpenAI para gerar combinações de lanches."""
     try:
         resposta = openai.chat.completions.create(
-            model="gpt-4",
+            model="gpt-3.5-turbo",
             messages=[
                 {
                     "role": "system",
@@ -131,7 +131,7 @@ def main():
                 # Obter combinações da OpenAI
                 combinations = generate_combinations_with_openai(prompt)
 
-                st.write("## 🍽️ Combinações sugeridas pela OpenAI:")
+                st.write("## 🍽️ Combinações sugeridas:")
                 st.text(combinations)
 
             except FileNotFoundError:
