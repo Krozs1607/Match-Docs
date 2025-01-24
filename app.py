@@ -94,7 +94,7 @@ def main():
         """, unsafe_allow_html=True
     )
 
-    st.title("🍏 Sugestão de Lanches Nutritivos por OpenAI")
+    st.title("🍏 Sugestão de Fastfood sem sair da dieta 🍏")
 
     st.write("Descubra combinações de lanches com base no seu perfil nutricional e objetivo!")
 
