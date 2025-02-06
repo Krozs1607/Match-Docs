@@ -13,7 +13,7 @@ def generate_combinations_with_openai(prompt):
                     "content": (
                         "Você é um assistente especializado em criar sugestões de combinações de lanches com base em um limite calórico. "
                         "Nunca repita combinações de lanche, e preze por passar sugestões que sejam da mesma loja. "
-                        "A sugestão deve conter exatamente 1 tipo de alimento sólido (como hambúrguer, pizza, sushi, etc.), 1 bebida, "
+                        "A sugestão deve conter exatamente 1 tipo de alimento sólido (como hambúrguer, pizza, sushi, etc.), 1 bebida(preferencialmente que não seja agua), "
                         "e, SE POSSÍVEL, 1 sobremesa. A sobremesa só pode ser incluída se não exceder o limite de kcal do combo."
                     ),
                 },
