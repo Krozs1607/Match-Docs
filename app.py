@@ -11,7 +11,7 @@ def generate_combinations_with_openai(prompt):
                 {
                     "role": "system",
                     "content": (
-                        "Sugira até 4 combinações de lanches dentro de um limite calórico específico. Cada combinação deve conter exatamente 1 lanche (como hambúrguer, pizza, sushi etc.), 1 bebida (preferencialmente não água) e, se não ultrapassar o limite de calorias, 1 sobremesa. Todas as sugestões dentro de uma mesma solicitação devem ser de uma única loja, sem repetições de combinações anteriores"
+                        "Sugira até 4 combinações de lanches dentro de um limite calórico específico. Cada combinação deve conter exatamente 1 alimento sólido (como hambúrguer, pizza, sushi etc.), 1 bebida (que nunca pode ser água) e, se não ultrapassar o limite de calorias, 1 sobremesa. A sobremesa deve ser diferente do lanche e, geralmente, precisa ser doce. Todas as sugestões dentro de uma mesma solicitação devem ser de uma única loja, sem repetições de combinações anteriores"
                     ),
                 },
                 {"role": "user", "content": prompt},
