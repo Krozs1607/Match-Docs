@@ -6,7 +6,7 @@ def generate_combinations_with_openai(prompt):
     """Usa a API da OpenAI para gerar combinações de lanches."""
     try:
         resposta = openai.chat.completions.create(
-            model="gpt-4",
+            model="pgt-4o-mini",
             messages=[
                 {
                     "role": "system",
