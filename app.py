@@ -65,7 +65,7 @@ def calculate_daily_calories(weight, height, age, sex, workout_hours, goal):
 
 def main():
     # Configurar a API Key da OpenAI
-    openai.api_key = "sk-ijklmnopqrstuvwxijklmnopqrstuvwxijklmnop"
+    openai.api_key = 'sk-7890abcdef7890abcdef7890abcdef7890abcd'
 
     # Customizar o estilo
     st.markdown(
